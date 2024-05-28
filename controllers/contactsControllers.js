@@ -6,14 +6,8 @@ export const getAllContacts = async (req, res, next) => {
 
     try{
         const contacts = await listContacts();
-
-
-        if (error) {
-            return res.status(404).json({ "message": "Not found" });
-        }
-
-
         res.status(200).json(contacts);
+
     } catch (error) {
         next(error);
     }
@@ -68,14 +62,14 @@ export const updateContact = async (req, res, next) => {
 
     try {
         const { error } = updateContactSchema.validate(req.body);
-        if (error) {
-            throw new HttpError(400, error.message);
-        }
+        
         const { id } = req.params;
         const updatedContact = await updateContact(id, req.body);
+        
         if (!updatedContact) {
             throw new HttpError(404, "Not found");
         }
+
         res.status(200).json(updatedContact);
     } catch (error) {
         next(error);
